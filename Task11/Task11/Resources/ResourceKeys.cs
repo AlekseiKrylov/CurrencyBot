@@ -5,36 +5,10 @@ namespace Task11.Resources
 {
     internal static class ResourceKeys
     {
-        #region User Messages
-
-        public const string WelcomeMessage = "WelcomeMessage";
-        public const string CurrencyPromptMessage = "CurrencyPromptMessage";
-        public const string DatePromptMessage = "DatePromptMessage";
-        public const string InvalidCurrencyMessage = "InvalidCurrencyMessage";
-        public const string InvalidDateMessage = "InvalidDateMessage";
-        public const string ExchangeCourseMessage = "ExchangeCourseMessage";
-        public const string UnknownСommandMessage = "UnknownСommandMessage";
-        public const string HelpMessage = "HelpMessage";
-        public const string DefaultMessage = "DefaultMessage";
-
-        public const string PlaceholderMessage = "PlaceholderMessage";
-
-        #endregion
-
-        #region Caution Messages
-
-        public const string NoDataCaution = "NoDataCaution";
-
-        #endregion
-
-        #region Error Messages
-
-        public const string RequestProcessingError = "RequestProcessingError";
-
-        #endregion
-
         public enum RKeys
         {
+            #region User Messages
+
             WelcomeMessage,
             CurrencyPromptMessage,
             DatePromptMessage,
@@ -44,13 +18,47 @@ namespace Task11.Resources
             UnknownСommandMessage,
             HelpMessage,
             DefaultMessage,
-            PlaceholderMessage,
+
+            #endregion
+
+            #region Caution Messages
+
+            /// <summary>
+            /// Text: No data
+            /// </summary>
             NoDataCaution,
-            RequestProcessingError,
+            /// <summary>
+            /// Text: {1} exchange rate for {0} was not found. 0 - Date, 1 - CurrencyCode
+            /// </summary>
             RateNotFoundCaution,
+            /// <summary>
+            /// Text: Currency rates for {0} were not found. 0 - Date.
+            /// </summary>
             RatesNotFoundCaution,
+
+            #endregion
+
+            #region Error Messages
+
+            /// <summary>
+            /// Text: There was an error in processing your request.
+            /// </summary>
+            RequestProcessingError,
+            /// <summary>
+            /// Text: Failed to retrieve exchange rate data.
+            /// </summary>
             FailedRetrieveDataError,
-            ProcessingDataError
+            /// <summary>
+            /// Text: Error in processing data on exchange rates.
+            /// </summary>
+            ProcessingDataError,
+
+            #endregion
+            
+            /// <summary>
+            /// Text: This is a test message. If you see it, please notify the developer.
+            /// </summary>
+            PlaceholderMessage
         }
 
         public static ResourceManager ResourceManager { get; private set; }
@@ -64,16 +72,6 @@ namespace Task11.Resources
                     ?? $"Something's wrong! {resourceKey}";
 
             return ResourceManager.GetString(resourceKey.ToString(), CultureInfo.InvariantCulture)
-                    ?? $"Something's wrong! {resourceKey}";
-        }
-
-        public static string GetLocalizedMessage(string resourceKey, string languageCode)
-        {
-            if (!string.IsNullOrWhiteSpace(languageCode))
-                return ResourceManager.GetString(resourceKey, new CultureInfo(languageCode))
-                    ?? $"Something's wrong! {resourceKey}";
-
-            return ResourceManager.GetString(resourceKey, CultureInfo.InvariantCulture)
                     ?? $"Something's wrong! {resourceKey}";
         }
     }

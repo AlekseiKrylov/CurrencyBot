@@ -176,7 +176,7 @@ Sell rate: {3} {4}</value>
     <comment>Caution</comment>
   </data>
   <data name="RequestProcessingError" xml:space="preserve">
-    <value>Sorry, there was an error in processing your request.</value>
+    <value>There was an error in processing your request.</value>
     <comment>Error</comment>
   </data>
   <data name="UnknownСommandMessage" xml:space="preserve">

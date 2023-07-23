@@ -52,7 +52,7 @@ namespace Task11.Services
             }
             catch (Exception ex)
             {
-                var responseMessage = GetLocalizedMessage(RKeys.RequestProcessingError, update.Message.From.LanguageCode); //_resourceManager.GetString(ResourceKeys.RequestProcessingError, new CultureInfo(update.Message.From.LanguageCode));
+                var responseMessage = GetLocalizedMessage(RKeys.RequestProcessingError, update.Message.From.LanguageCode);
                 await bot.SendTextMessageAsync(update.Message.Chat.Id, responseMessage, cancellationToken: cancellationToken);
                 Console.WriteLine($"Error handling 'update': {ex.Message}");
             }

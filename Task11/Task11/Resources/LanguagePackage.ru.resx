@@ -172,7 +172,7 @@
     <comment>Caution</comment>
   </data>
   <data name="RequestProcessingError" xml:space="preserve">
-    <value>Извините, при обработке вашего запроса произошла ошибка.</value>
+    <value>При обработке вашего запроса произошла ошибка.</value>
     <comment>Error</comment>
   </data>
   <data name="UnknownСommandMessage" xml:space="preserve">
