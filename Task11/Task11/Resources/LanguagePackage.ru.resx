@@ -118,24 +118,69 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CurrencyPromptMessage" xml:space="preserve">
-    <value>"Select the currency on the on-screen keyboard or send the currency code to the chat, for example USD"</value>
+    <value>Выберите валюту на экранной клавиатуре или отправьте в чат код валюты, например USD.</value>
+    <comment>Message</comment>
   </data>
   <data name="DatePromptMessage" xml:space="preserve">
-    <value>"Select a date on the on-screen keyboard or send a date in the format dd.MM.yyyyy to the chat. For example 15.05.2021"</value>
+    <value>Выберите дату на экранной клавиатуре или отправьте в чат дату в формате dd.MM.yyyy. Например 15.05.2021</value>
+    <comment>Message</comment>
+  </data>
+  <data name="DefaultMessage" xml:space="preserve">
+    <value>Для начала работы используйте команду /start.</value>
+    <comment>Message</comment>
   </data>
   <data name="ExchangeCourseMessage" xml:space="preserve">
-    <value>"Date: {0}nCurrency: {1}nBuy rate: {2} nSell rate: {3}"</value>
+    <value>Дата: {0}
+Валюта: {1}
+Курс покупки: {2} {4}
+Курс продажи: {3} {4}</value>
+    <comment>Message</comment>
+  </data>
+  <data name="FailedRetrieveDataError" xml:space="preserve">
+    <value>Не удалось получить данные о курсах валют.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="HelpMessage" xml:space="preserve">
+    <value>Список доступных команд:
+/start - запуск бота
+/language - выбор языка
+/help - данный список</value>
+    <comment>Message</comment>
   </data>
   <data name="InvalidCurrencyMessage" xml:space="preserve">
-    <value>"Invalid currency format. Please try again."</value>
+    <value>Некорректный формат валюты. Попробуйте ещё раз.</value>
+    <comment>Message</comment>
   </data>
   <data name="InvalidDateMessage" xml:space="preserve">
-    <value>"Incorrect date format. Please use the format dd.MM.yyyyy"</value>
+    <value>Некорректный формат даты. Пожалуйста, используйте формат dd.MM.yyyy</value>
+    <comment>Message</comment>
   </data>
-  <data name="PlaceholderMessage" xml:space="preserve">
-    <value>"This is a test message. If you see it, please notify the developer."</value>
+  <data name="NoDataCaution" xml:space="preserve">
+    <value>Нет данных</value>
+    <comment>Caution</comment>
+  </data>
+  <data name="ProcessingDataError" xml:space="preserve">
+    <value>Ошибка при обработке данных о курсах валют.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="RateNotFoundCaution" xml:space="preserve">
+    <value>Курс для {1} на {0} не найден.</value>
+    <comment>Caution</comment>
+  </data>
+  <data name="RatesNotFoundCaution" xml:space="preserve">
+    <value>Курсы валют на {0} не найдены.</value>
+    <comment>Caution</comment>
+  </data>
+  <data name="RequestProcessingError" xml:space="preserve">
+    <value>Извините, при обработке вашего запроса произошла ошибка.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="UnknownСommandMessage" xml:space="preserve">
+    <value>Неизвестная команда.</value>
+    <comment>Message</comment>
   </data>
   <data name="WelcomeMessage" xml:space="preserve">
-    <value>"Hello, the bot allows you to get currency rates to UAH from Privat Bank. Select the currency on the on-screen keyboard or enter the currency code in the chat, for example USD"</value>
+    <value>Привет! Бот позволяет получить курсы валют к гривне от Приват Банка. Выберите валюту на экранной клавиатуре или введите код валюты в чат, например USD.</value>
+    <comment>Message</comment>
   </data>
 </root>

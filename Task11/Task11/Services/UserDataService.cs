@@ -6,9 +6,9 @@ namespace Task11.Services
 {
     internal class UserDataService : IUserDataService
     {
-        private readonly ConcurrentDictionary<long, UserData> _userDataCache = new ConcurrentDictionary<long, UserData>();
+        private readonly ConcurrentDictionary<long, UserData> _userDataCache = new();
 
-        public UserData GetUserData(long chatId)
+        public UserData? GetUserData(long chatId)
         {
             _userDataCache.TryGetValue(chatId, out var data);
             return data?.Copy();

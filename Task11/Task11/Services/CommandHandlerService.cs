@@ -2,13 +2,16 @@
 using System.Resources;
 using System.Text.RegularExpressions;
 using Task11.Models;
-using Task11.Resources;
 using Task11.Services.Interfaces;
+using static Task11.Resources.ResourceKeys;
 
 namespace Task11.Services
 {
     internal class CommandHandlerService : ICommandHandlerService
     {
+        private const string PATTERN_CURRENCY_CODE = @"^[A-Za-z]{3}$";
+        private const string DATE_FORMAT = "dd.MM.yyyy";
+        private const int DECIMAL_POINT = 2;
         private readonly ICurrencyService _currencyService;
         private readonly IUserDataService _userDataService;
         private readonly ResourceManager _resourceManager;
@@ -20,94 +23,81 @@ namespace Task11.Services
             _resourceManager = resourceManager;
         }
 
-        public async Task<string> HandleCommand(string command, long chatId, string messageText)
+        public async Task<string> HandleCommand(string command, long chatId, string messageText, UserData userData)
         {
-            switch (command)
+            if (string.IsNullOrWhiteSpace(command))
+                return await HandleUserInput(chatId, messageText, userData);
+
+            return command switch
             {
-                case "/start":
-                    return await HandleStartCommand(chatId);
-                default:
-                    return await HandleUserInput(chatId, messageText);
-            }
+                "/start" => HandleStartCommand(userData),
+                "/help" => GetLocalizedMessage(RKeys.HelpMessage, userData.LanguageCode), //GetResponse(ResourceKeys.HelpMessage, userData.LanguageCode),
+                _ => $"{GetLocalizedMessage(RKeys.UnknownСommandMessage, userData.LanguageCode)} {GetLocalizedMessage(RKeys.HelpMessage, userData.LanguageCode)}" //$"{GetResponse(ResourceKeys.UnknownСommandMessage, userData.LanguageCode)} {GetResponse(ResourceKeys.HelpMessage, userData.LanguageCode)}",
+            }; ;
         }
 
-        private Task<string> HandleStartCommand(long chatId)
+        private string HandleStartCommand(UserData userData)
         {
-            var userData = _userDataService.GetUserData(chatId);
-            return Task.FromResult(_resourceManager.GetString(ResourceKeys.WelcomeMessage, new CultureInfo(userData.LanguageCode)));
+            return GetLocalizedMessage(RKeys.WelcomeMessage, userData.LanguageCode); //GetResponse(ResourceKeys.WelcomeMessage, userData.LanguageCode);
         }
 
-
-        public async Task<string> HandleUserInput(long chatId, string messageText)
+        public async Task<string> HandleUserInput(long chatId, string messageText, UserData userData)
         {
-            var userData = _userDataService.GetUserData(chatId);
-
-            switch (userData)
+            return userData switch
             {
-                case null:
-                    return await HandleEmptyState(chatId);
-                case var userDataState when userDataState.SelectedCurrency == null:
-                    return await HandleInputCurrency(chatId, messageText);
-                case var userDataState when userDataState.SelectedCurrency != null:
-                    return await HandleInputData(chatId, messageText);
-                default:
-                    return @"Please use the command '/start' to get started";
-            }
+                var userDataState when userDataState.SelectedCurrency == string.Empty => HandleInputCurrency(chatId, messageText, userData),
+                var userDataState when userDataState.SelectedCurrency != string.Empty => await HandleInputDate(chatId, messageText, userData),
+                _ => GetLocalizedMessage(RKeys.DefaultMessage, userData.LanguageCode) //GetResponse(ResourceKeys.DefaultMessage, userData.LanguageCode),
+            };
         }
 
-        private Task<string> HandleEmptyState(long chatId)
+        private string HandleInputCurrency(long chatId, string messageText, UserData userData)
         {
-            _userDataService.SaveUserData(chatId, new UserData());
-            return Task.FromResult("Привет! Бот позволяет получить курсы валют Приват Банка. \n Выберите валюту. Например USD");
-        }
-
-        private Task<string> HandleInputCurrency(long chatId, string messageText)
-        {
-            var userData = _userDataService.GetUserData(chatId);
-
-            if (!Regex.IsMatch(messageText, "^[A-Za-z]{3}$"))
-                return Task.FromResult(_resourceManager.GetString(ResourceKeys.InvalidCurrencyMessage, new CultureInfo(userData.LanguageCode)));
+            if (!Regex.IsMatch(messageText, PATTERN_CURRENCY_CODE))
+                return GetLocalizedMessage(RKeys.InvalidCurrencyMessage, userData.LanguageCode); //GetResponse(ResourceKeys.InvalidCurrencyMessage, userData.LanguageCode);
 
             userData.SelectedCurrency = messageText.ToUpper();
             _userDataService.SaveUserData(chatId, userData);
 
-            return Task.FromResult(_resourceManager.GetString(ResourceKeys.DatePromptMessage, new CultureInfo(userData.LanguageCode)));
+            return GetLocalizedMessage(RKeys.DatePromptMessage, userData.LanguageCode); //GetResponse(ResourceKeys.DatePromptMessage, userData.LanguageCode);
         }
 
-        private async Task<string> HandleInputData(long chatId, string messageText)
+        private async Task<string> HandleInputDate(long chatId, string messageText, UserData userData)
         {
-            var userData = _userDataService.GetUserData(chatId);
-
-            if (!DateTime.TryParseExact(messageText, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var selectedDate))
-                return await Task.FromResult(_resourceManager.GetString(ResourceKeys.InvalidDateMessage, new CultureInfo(userData.LanguageCode)));
+            if (!DateTime.TryParseExact(messageText, DATE_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+                return GetLocalizedMessage(RKeys.InvalidDateMessage, userData.LanguageCode); //GetResponse(ResourceKeys.InvalidDateMessage, userData.LanguageCode);
 
             var selectedCurrency = userData.SelectedCurrency;
-            var currencyRateInfo = await _currencyService.GetCurrencyInfoAsync(selectedCurrency, messageText);
+            var currencyRateInfo = await _currencyService.GetCurrencyInfoAsync(selectedCurrency, messageText, userData.LanguageCode);
 
-            var exchangeCourseMessage = _resourceManager.GetString(ResourceKeys.ExchangeCourseMessage, new CultureInfo(userData.LanguageCode));
+            var exchangeCourseMessage = GetLocalizedMessage(RKeys.ExchangeCourseMessage, userData.LanguageCode); //GetResponse(ResourceKeys.ExchangeCourseMessage, userData.LanguageCode);
 
-            if (currencyRateInfo is null)
-                return await Task.FromResult(_resourceManager.GetString(ResourceKeys.PlaceholderMessage, new CultureInfo(userData.LanguageCode)));
-
-            var responseRateMessage = string.Format
+            var formattedResponseMessage = string.Format
                 (exchangeCourseMessage
-                , selectedDate.ToString("dd.MM.yyyy")
+                , messageText
                 , selectedCurrency
-                , FormatRate(currencyRateInfo.PurchaseRate, 2)
-                , FormatRate(currencyRateInfo.SaleRate, 2));
+                , FormatRate(currencyRateInfo.PurchaseRate, DECIMAL_POINT, userData.LanguageCode)
+                , FormatRate(currencyRateInfo.SaleRate, DECIMAL_POINT, userData.LanguageCode)
+                , currencyRateInfo.BaseCurrency);
 
-            userData.SelectedCurrency = null;
+            userData.SelectedCurrency = string.Empty;
             _userDataService.SaveUserData(chatId, userData);
 
-            return responseRateMessage;
+            return formattedResponseMessage;
         }
 
-        private static string FormatRate(decimal? rate, int decimalPoint)
+        //private string GetResponse(string resourceKey, string languageCode)
+        //{
+        //    return _resourceManager.GetString(resourceKey, new CultureInfo(languageCode))
+        //        ?? $"Something's wrong! {resourceKey}";
+        //}
+
+        private string FormatRate(decimal? rate, int decimalPoint, string languageCode)
         {
             if (rate.HasValue)
                 return Math.Round(rate.Value, decimalPoint).ToString();
 
-            return "Нет данных";
+            return GetLocalizedMessage(RKeys.NoDataCaution, languageCode); //GetResponse(ResourceKeys.NoDataCaution, languageCode);
         }
     }
 }

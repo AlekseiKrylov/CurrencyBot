@@ -2,8 +2,8 @@
 {
     internal class UserData
     {
-        public string? SelectedCurrency { get; set; }
-        public string? LanguageCode { get; set; }
+        public string SelectedCurrency { get; set; } = string.Empty;
+        public string LanguageCode { get; set; } = string.Empty;
 
         public UserData Copy() => new()
         {

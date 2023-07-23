@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Task11.Models;
 using Task11.Services.Interfaces;
+using static Task11.Resources.ResourceKeys;
 
 namespace Task11.Services
 {
@@ -15,7 +16,7 @@ namespace Task11.Services
             _bankApiUrl = httpClient.BaseAddress.ToString();
         }
 
-        public async Task<CurrencyRate> GetCurrencyRatesAsync(string date)
+        public async Task<CurrencyRate> GetCurrencyRatesAsync(string date, string userLanguage)
         {
             try
             {
@@ -29,21 +30,21 @@ namespace Task11.Services
                 var serializer = new JsonSerializer();
                 var currencyRate = JsonConvert.DeserializeObject<CurrencyRate>(jsonResponse);
 
-                return currencyRate;
+                return currencyRate is null ? throw new NullReferenceException(GetLocalizedMessage(RKeys.RatesNotFoundCaution, userLanguage)) : currencyRate;
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine($"Ошибка при выполнении HTTP-запроса: {ex.Message}");
-                throw new Exception("Не удалось получить данные о курсах валют.");
+                Console.WriteLine($"Error during HTTP request execution: {ex.Message}");
+                throw new HttpRequestException(GetLocalizedMessage(RKeys.FailedRetrieveDataError, userLanguage));
             }
             catch (JsonException ex)
             {
-                Console.WriteLine($"Ошибка при парсинге JSON: {ex.Message}");
-                throw new Exception("Ошибка при обработке данных о курсах валют.");
+                Console.WriteLine($"Error during JSON parsing: {ex.Message}");
+                throw new Exception(GetLocalizedMessage(RKeys.ProcessingDataError, userLanguage));
             }
         }
 
-        public async Task<CurrencyInfo> GetCurrencyInfoAsync(string currencyCode, string date)
+        public async Task<CurrencyInfo> GetCurrencyInfoAsync(string currencyCode, string date, string userLanguage)
         {
             try
             {
@@ -57,26 +58,22 @@ namespace Task11.Services
                 var serializer = new JsonSerializer();
                 var currencyRate = JsonConvert.DeserializeObject<CurrencyRate>(jsonResponse);
 
-                if (currencyRate is not null && currencyRate.ExchangeRate.Length > 0)
-                {
-                    var selectedCurrencyRates = currencyRate.ExchangeRate.FirstOrDefault(rate => rate.Currency == currencyCode);
-                    if (selectedCurrencyRates != null)
-                        return selectedCurrencyRates;
+                if (currencyRate is null || currencyRate.ExchangeRate.Length < 1)
+                    throw new NullReferenceException(GetLocalizedMessage(RKeys.RatesNotFoundCaution, userLanguage));
+                
+                var selectedCurrencyRates = currencyRate.ExchangeRate.FirstOrDefault(rate => rate.Currency == currencyCode);
 
-                    throw new Exception("Курс валюты не найден на указанную дату.");
-                }
-
-                throw new Exception("Курсы валют не найдены.");
+                return selectedCurrencyRates is null ? throw new NullReferenceException(GetLocalizedMessage(RKeys.RateNotFoundCaution, userLanguage)) : selectedCurrencyRates;
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine($"Ошибка при выполнении HTTP-запроса: {ex.Message}");
-                throw new Exception("Не удалось получить данные о курсах валют.");
+                Console.WriteLine($"Error during HTTP request execution: {ex.Message}");
+                throw new HttpRequestException(GetLocalizedMessage(RKeys.FailedRetrieveDataError, userLanguage));
             }
             catch (JsonException ex)
             {
-                Console.WriteLine($"Ошибка при парсинге JSON: {ex.Message}");
-                throw new Exception("Ошибка при обработке данных о курсах валют.");
+                Console.WriteLine($"Error during JSON parsing: {ex.Message}");
+                throw new Exception(GetLocalizedMessage(RKeys.ProcessingDataError, userLanguage));
             }
         }
     }

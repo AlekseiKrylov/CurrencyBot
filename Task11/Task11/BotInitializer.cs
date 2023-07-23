@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Resources;
+using Task11.Resources;
 using Task11.Services;
 using Task11.Services.Interfaces;
 using Telegram.Bot;
@@ -22,6 +23,8 @@ namespace Task11
         public void Initialize()
         {
             var serviceProvider = ConfigureServices();
+            var resourceManager = serviceProvider.GetRequiredService<ResourceManager>();
+            ResourceKeys.InitializeResourceManager(resourceManager);
 
             var bot = serviceProvider.GetRequiredService<ITelegramBotClient>();
             Console.WriteLine($"Bot {bot.GetMeAsync().Result.FirstName} is running");
@@ -59,7 +62,7 @@ namespace Task11
             })
             .AddSingleton(provider =>
             {
-                return new ResourceManager("Task11.Resources.Messages", typeof(Program).Assembly);
+                return new ResourceManager("Task11.Resources.LanguagePackage", typeof(Program).Assembly);
             })
             .BuildServiceProvider();
     }

@@ -14,10 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Messages.resx">
+    <EmbeddedResource Update="Resources\LanguagePackage.resx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Messages.ru.resx">
+    <EmbeddedResource Update="Resources\LanguagePackage.ru.resx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
