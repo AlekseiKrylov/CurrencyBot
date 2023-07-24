@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CurrencyPromptMessage" xml:space="preserve">
-    <value>Выберите валюту на экранной клавиатуре или отправьте в чат код валюты, например USD.</value>
+    <value>Выберите валюту на экранной клавиатуре или отправьте в чат код валюты. Пример USD.</value>
     <comment>Message</comment>
   </data>
   <data name="DatePromptMessage" xml:space="preserve">
-    <value>Выберите дату на экранной клавиатуре или отправьте в чат дату в формате dd.MM.yyyy. Например 15.05.2021</value>
+    <value>Выберите дату на экранной клавиатуре или отправьте в чат дату в формате dd.MM.yyyy. Пример 15.05.2021</value>
     <comment>Message</comment>
   </data>
   <data name="DefaultMessage" xml:space="preserve">
@@ -140,6 +140,14 @@
     <value>Не удалось получить данные о курсах валют.</value>
     <comment>Error</comment>
   </data>
+  <data name="Go" xml:space="preserve">
+    <value>Начать</value>
+    <comment>Menu Item</comment>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Помощь</value>
+    <comment>Menu Item</comment>
+  </data>
   <data name="HelpMessage" xml:space="preserve">
     <value>Список доступных команд:
 /start - запуск бота
@@ -154,6 +162,10 @@
   <data name="InvalidDateMessage" xml:space="preserve">
     <value>Некорректный формат даты. Пожалуйста, используйте формат dd.MM.yyyy</value>
     <comment>Message</comment>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Язык</value>
+    <comment>Menu Item</comment>
   </data>
   <data name="NoDataCaution" xml:space="preserve">
     <value>Нет данных</value>
@@ -171,16 +183,32 @@
     <value>Курсы валют на {0} не найдены.</value>
     <comment>Caution</comment>
   </data>
+  <data name="Repeat" xml:space="preserve">
+    <value>Повторить</value>
+    <comment>Menu Item</comment>
+  </data>
   <data name="RequestProcessingError" xml:space="preserve">
     <value>При обработке вашего запроса произошла ошибка.</value>
     <comment>Error</comment>
+  </data>
+  <data name="SelectOptionMessage" xml:space="preserve">
+    <value>Выберите опцию</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Сегодня</value>
+    <comment>Menu Item</comment>
   </data>
   <data name="UnknownСommandMessage" xml:space="preserve">
     <value>Неизвестная команда.</value>
     <comment>Message</comment>
   </data>
   <data name="WelcomeMessage" xml:space="preserve">
-    <value>Привет! Бот позволяет получить курсы валют к гривне от Приват Банка. Выберите валюту на экранной клавиатуре или введите код валюты в чат, например USD.</value>
+    <value>Привет! Бот позволяет получить курсы валют к гривне от ПриватБанка.</value>
     <comment>Message</comment>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Вчера</value>
+    <comment>Menu Item</comment>
   </data>
 </root>

@@ -60,7 +60,7 @@ namespace Task11.Services
 
                 if (currencyRate is null || currencyRate.ExchangeRate.Length < 1)
                     throw new NullReferenceException(GetLocalizedMessage(RKeys.RatesNotFoundCaution, userLanguage));
-                
+
                 var selectedCurrencyRates = currencyRate.ExchangeRate.FirstOrDefault(rate => rate.Currency == currencyCode);
 
                 return selectedCurrencyRates is null ? throw new NullReferenceException(GetLocalizedMessage(RKeys.RateNotFoundCaution, userLanguage)) : selectedCurrencyRates;

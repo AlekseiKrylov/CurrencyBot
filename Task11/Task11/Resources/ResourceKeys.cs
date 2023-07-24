@@ -18,6 +18,7 @@ namespace Task11.Resources
             UnknownСommandMessage,
             HelpMessage,
             DefaultMessage,
+            SelectOptionMessage,
 
             #endregion
 
@@ -54,7 +55,18 @@ namespace Task11.Resources
             ProcessingDataError,
 
             #endregion
-            
+
+            #region Menu Items
+
+            Go,
+            Language,
+            Help,
+            Yesterday,
+            Today,
+            Repeat,
+
+            #endregion
+
             /// <summary>
             /// Text: This is a test message. If you see it, please notify the developer.
             /// </summary>

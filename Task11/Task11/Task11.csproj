@@ -16,9 +16,15 @@
   <ItemGroup>
     <EmbeddedResource Update="Resources\LanguagePackage.resx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\LanguagePackage.ru.resx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\LanguagePackage.uk.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
 

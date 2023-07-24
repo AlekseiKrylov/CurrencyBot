@@ -1,5 +1,4 @@
-﻿using System.Resources;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Task11.Models;
 using Task11.Services.Interfaces;
 using Telegram.Bot;
@@ -14,26 +13,38 @@ namespace Task11.Services
         private const string PATTERN_COMMAND = @"^\/\w+";
         private readonly ICommandHandlerService _commandHandlerService;
         private readonly IUserDataService _userDataService;
-        private readonly ResourceManager _resourceManager;
 
-        public HandlerService(ICommandHandlerService commandHandlerService, IUserDataService userDataService, ResourceManager resourceManager)
+        public HandlerService(ICommandHandlerService commandHandlerService, IUserDataService userDataService)
         {
             _commandHandlerService = commandHandlerService;
             _userDataService = userDataService;
-            _resourceManager = resourceManager;
         }
 
         public async Task HandleUpdateAsync(ITelegramBotClient bot, Update update, CancellationToken cancellationToken)
         {
             try
             {
-                if (update.Type != UpdateType.Message && update.Message?.Text is null)
+                if ((update.Type != UpdateType.CallbackQuery && update.CallbackQuery?.From is null) && (update.Type != UpdateType.Message && update.Message?.Text is null))
                     return;
 
-                var chatId = update.Message.Chat.Id;
-                var messageText = update.Message.Text;
-                var languageCode = update.Message.From.LanguageCode;
-                var command = string.Empty;
+                string command = string.Empty;
+                long chatId = default;
+                string messageText = string.Empty;
+                string languageCode = string.Empty;
+
+                if (update.Type == UpdateType.CallbackQuery)
+                {
+                    chatId = update.CallbackQuery.From.Id;
+                    messageText = update.CallbackQuery.Data;
+                    languageCode = update.CallbackQuery.From.LanguageCode;
+                }
+
+                if (update.Type == UpdateType.Message)
+                {
+                    chatId = update.Message.Chat.Id;
+                    messageText = update.Message.Text;
+                    languageCode = update.Message.From.LanguageCode;
+                }
 
                 var userData = _userDataService.GetUserData(chatId) ?? new UserData();
 
@@ -46,14 +57,26 @@ namespace Task11.Services
                 if (Regex.IsMatch(messageText, PATTERN_COMMAND))
                     command = messageText;
 
-                string responseMessage = await _commandHandlerService.HandleCommand(command, chatId, messageText, userData);
+                var hendlerResult = await _commandHandlerService.HandleCommand(command, chatId, messageText, userData);
 
-                await bot.SendTextMessageAsync(chatId, responseMessage, cancellationToken: cancellationToken);
+                await bot.SendTextMessageAsync(chatId, hendlerResult.ResponseMessage, replyMarkup: hendlerResult.Keyboard, cancellationToken: cancellationToken);
             }
             catch (Exception ex)
             {
-                var responseMessage = GetLocalizedMessage(RKeys.RequestProcessingError, update.Message.From.LanguageCode);
-                await bot.SendTextMessageAsync(update.Message.Chat.Id, responseMessage, cancellationToken: cancellationToken);
+                var responseMessage = update.Type switch
+                {
+                    UpdateType.Message => GetLocalizedMessage(RKeys.RequestProcessingError, update.Message.From.LanguageCode),
+                    UpdateType.CallbackQuery => GetLocalizedMessage(RKeys.RequestProcessingError, update.CallbackQuery.From.LanguageCode),
+                    _ => GetLocalizedMessage(RKeys.RequestProcessingError, string.Empty)
+                };
+
+                var chatId = update.Type switch
+                {
+                    UpdateType.Message => update.Message.Chat.Id,
+                    UpdateType.CallbackQuery => update.CallbackQuery.From.Id,
+                };
+
+                await bot.SendTextMessageAsync(chatId, responseMessage, cancellationToken: cancellationToken);
                 Console.WriteLine($"Error handling 'update': {ex.Message}");
             }
         }
