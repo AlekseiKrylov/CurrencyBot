@@ -27,24 +27,19 @@ namespace Task11.Services
                 if ((update.Type != UpdateType.CallbackQuery && update.CallbackQuery?.From is null) && (update.Type != UpdateType.Message && update.Message?.Text is null))
                     return;
 
-                string command = string.Empty;
-                long chatId = default;
-                string messageText = string.Empty;
-                string languageCode = string.Empty;
+                long chatId = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery.From.Id
+                            : (update.Type == UpdateType.Message) ? update.Message.Chat.Id
+                            : default;
 
-                if (update.Type == UpdateType.CallbackQuery)
-                {
-                    chatId = update.CallbackQuery.From.Id;
-                    messageText = update.CallbackQuery.Data;
-                    languageCode = update.CallbackQuery.From.LanguageCode;
-                }
+                string messageText = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery.Data
+                                   : (update.Type == UpdateType.Message) ? update.Message.Text
+                                   : string.Empty;
 
-                if (update.Type == UpdateType.Message)
-                {
-                    chatId = update.Message.Chat.Id;
-                    messageText = update.Message.Text;
-                    languageCode = update.Message.From.LanguageCode;
-                }
+                string languageCode = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery.From.LanguageCode
+                                    : (update.Type == UpdateType.Message) ? update.Message.From.LanguageCode
+                                    : string.Empty;
+
+                string command = Regex.IsMatch(messageText, PATTERN_COMMAND) ? messageText : string.Empty;
 
                 var userData = _userDataService.GetUserData(chatId) ?? new UserData();
 
