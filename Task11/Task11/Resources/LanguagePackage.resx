@@ -122,7 +122,7 @@
     <comment>Message</comment>
   </data>
   <data name="DatePromptMessage" xml:space="preserve">
-    <value>Select a date on the on-screen keyboard or send a date in the format dd.MM.yyyyy to the chat. Example 15.05.2021</value>
+    <value>Select a date on the on-screen keyboard or send a date in the format dd.MM.yyyy to the chat. Example 15.05.2021</value>
     <comment>Message</comment>
   </data>
   <data name="DefaultMessage" xml:space="preserve">
