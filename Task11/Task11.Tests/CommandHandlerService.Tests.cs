@@ -80,7 +80,7 @@ namespace Task11.Tests
         }
 
         [TestMethod]
-        [DataRow("en", "Select a date on the on-screen keyboard or send a date in the format dd.MM.yyyyy to the chat. Example 15.05.2021", "Yesterday,Today")]
+        [DataRow("en", "Select a date on the on-screen keyboard or send a date in the format dd.MM.yyyy to the chat. Example 15.05.2021", "Yesterday,Today")]
         [DataRow("ru", "Выберите дату на экранной клавиатуре или отправьте в чат дату в формате dd.MM.yyyy. Пример 15.05.2021", "Вчера,Сегодня")]
         [DataRow("uk", "Виберіть дату на екранній клавіатурі або надішліть у чат дату у форматі dd.MM.yyyy. Приклад 15.05.2021", "Вчора,Сьогодні")]
         public async Task HandleInputCurrency_ValidCurrency(string languageCode, string expectedResponse, string expectedKeyboardButtons)
