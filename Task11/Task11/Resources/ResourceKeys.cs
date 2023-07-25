@@ -3,7 +3,7 @@ using System.Resources;
 
 namespace Task11.Resources
 {
-    internal static class ResourceKeys
+    public static class ResourceKeys
     {
         public enum RKeys
         {

@@ -2,9 +2,9 @@
 
 namespace Task11.Services.Interfaces
 {
-    internal interface IUserDataService
+    public interface IUserDataService
     {
-        UserData? GetUserData(long chatId);
-        void SaveUserData(long chatId, UserData data);
+       public UserData? GetUserData(long chatId);
+       public void SaveUserData(long chatId, UserData data);
     }
 }

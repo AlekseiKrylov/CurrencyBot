@@ -8,7 +8,7 @@ using static Task11.Resources.ResourceKeys;
 
 namespace Task11.Services
 {
-    internal class HandlerService
+    public class HandlerService
     {
         private const string PATTERN_COMMAND = @"^\/\w+";
         private readonly ICommandHandlerService _commandHandlerService;

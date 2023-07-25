@@ -1,6 +1,6 @@
 ﻿namespace Task11.Models
 {
-    internal class UserData
+    public class UserData
     {
         public string SelectedCurrency { get; set; } = string.Empty;
         public string LanguageCode { get; set; } = string.Empty;

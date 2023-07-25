@@ -4,7 +4,7 @@ using Task11.Services.Interfaces;
 
 namespace Task11.Services
 {
-    internal class UserDataService : IUserDataService
+    public class UserDataService : IUserDataService
     {
         private readonly ConcurrentDictionary<long, UserData> _userDataCache = new();
 

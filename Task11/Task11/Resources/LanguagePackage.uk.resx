@@ -204,7 +204,7 @@
     <comment>Message</comment>
   </data>
   <data name="WelcomeMessage" xml:space="preserve">
-    <value>Привіт! Бот дає змогу отримати курси валют до гривні від ПриватБанку.</value>
+    <value>Привіт! Бот дозволяє отримувати курси валют до гривні від ПриватБанку.</value>
     <comment>Message</comment>
   </data>
   <data name="Yesterday" xml:space="preserve">

@@ -160,7 +160,7 @@ Sell rate: {3} {4}</value>
     <comment>Message</comment>
   </data>
   <data name="InvalidDateMessage" xml:space="preserve">
-    <value>Incorrect date format. Please use the format dd.MM.yyyyy</value>
+    <value>Incorrect date format. Please use the format dd.MM.yyyy</value>
     <comment>Message</comment>
   </data>
   <data name="Language" xml:space="preserve">

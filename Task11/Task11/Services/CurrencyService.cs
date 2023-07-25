@@ -5,7 +5,7 @@ using static Task11.Resources.ResourceKeys;
 
 namespace Task11.Services
 {
-    internal class CurrencyService : ICurrencyService
+    public class CurrencyService : ICurrencyService
     {
         private readonly HttpClient _httpClient;
         private readonly string _bankApiUrl;

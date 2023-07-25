@@ -3,7 +3,7 @@ using static Task11.Resources.ResourceKeys;
 
 namespace Task11.Utilities
 {
-    internal static class MenuBuilder
+    public static class MenuBuilder
     {
         public static InlineKeyboardMarkup StartMenu(string languageCode) => new(new[]
         {

@@ -1,6 +1,6 @@
 ﻿namespace Task11.Models
 {
-    internal class CurrencyRate
+    public class CurrencyRate
     {
         public string Date { get; set; }
         public string Bank { get; set; }

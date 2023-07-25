@@ -2,7 +2,7 @@
 
 namespace Task11.Services.Interfaces
 {
-    internal interface ICommandHandlerService
+    public interface ICommandHandlerService
     {
         Task<CommandHandlerResult> HandleCommand(string command, long chatId, string messageText, UserData userData);
     }

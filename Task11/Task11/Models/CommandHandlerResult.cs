@@ -2,7 +2,7 @@
 
 namespace Task11.Models
 {
-    internal class CommandHandlerResult
+    public class CommandHandlerResult
     {
         public string ResponseMessage { get; set; }
         public InlineKeyboardMarkup? Keyboard { get; set; }

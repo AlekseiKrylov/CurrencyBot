@@ -8,7 +8,7 @@ using static Task11.Utilities.MenuBuilder;
 
 namespace Task11.Services
 {
-    internal class CommandHandlerService : ICommandHandlerService
+    public class CommandHandlerService : ICommandHandlerService
     {
         private const string PATTERN_CURRENCY_CODE = @"^[A-Za-z]{3}$";
         private const string DATE_FORMAT = "dd.MM.yyyy";
