@@ -24,22 +24,22 @@ namespace Task11.Services
         {
             try
             {
-                if ((update.Type != UpdateType.CallbackQuery && update.CallbackQuery?.From is null) && (update.Type != UpdateType.Message && update.Message?.Text is null))
+                if (update.Type != UpdateType.CallbackQuery && update.CallbackQuery is null && update.Type != UpdateType.Message && update.Message?.From is null)
                     return;
 
-                long chatId = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery.From.Id
-                            : (update.Type == UpdateType.Message) ? update.Message.Chat.Id
+                long chatId = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery!.From.Id
+                            : (update.Type == UpdateType.Message) ? update.Message!.Chat.Id
                             : default;
 
-                string messageText = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery.Data
-                                   : (update.Type == UpdateType.Message) ? update.Message.Text
+                var messageText = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery!.Data ?? string.Empty
+                                   : (update.Type == UpdateType.Message) ? update.Message!.Text ?? string.Empty
                                    : string.Empty;
 
-                string languageCode = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery.From.LanguageCode
-                                    : (update.Type == UpdateType.Message) ? update.Message.From.LanguageCode
+                var languageCode = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery!.From.LanguageCode ?? string.Empty
+                                    : (update.Type == UpdateType.Message) ? update.Message!.From!.LanguageCode ?? string.Empty
                                     : string.Empty;
 
-                string command = Regex.IsMatch(messageText, PATTERN_COMMAND) ? messageText : string.Empty;
+                var command = Regex.IsMatch(messageText, PATTERN_COMMAND) ? messageText : string.Empty;
 
                 var userData = _userDataService.GetUserData(chatId) ?? new UserData();
 
@@ -49,9 +49,6 @@ namespace Task11.Services
                     _userDataService.SaveUserData(chatId, userData);
                 }
 
-                if (Regex.IsMatch(messageText, PATTERN_COMMAND))
-                    command = messageText;
-
                 var hendlerResult = await _commandHandlerService.HandleCommand(command, chatId, messageText, userData);
 
                 await bot.SendTextMessageAsync(chatId, hendlerResult.ResponseMessage, replyMarkup: hendlerResult.Keyboard, cancellationToken: cancellationToken);
@@ -60,18 +57,16 @@ namespace Task11.Services
             {
                 var responseMessage = update.Type switch
                 {
-                    UpdateType.Message => GetLocalizedMessage(RKeys.RequestProcessingError, update.Message.From.LanguageCode),
-                    UpdateType.CallbackQuery => GetLocalizedMessage(RKeys.RequestProcessingError, update.CallbackQuery.From.LanguageCode),
+                    UpdateType.Message => GetLocalizedMessage(RKeys.RequestProcessingError, update.Message?.From?.LanguageCode ?? string.Empty),
+                    UpdateType.CallbackQuery => GetLocalizedMessage(RKeys.RequestProcessingError, update.CallbackQuery?.From.LanguageCode ?? string.Empty),
                     _ => GetLocalizedMessage(RKeys.RequestProcessingError, string.Empty)
                 };
 
-                var chatId = update.Type switch
-                {
-                    UpdateType.Message => update.Message.Chat.Id,
-                    UpdateType.CallbackQuery => update.CallbackQuery.From.Id,
-                };
+                var chatId = (update.Message is not null) ? update.Message!.Chat.Id : (update.CallbackQuery is not null) ? update.CallbackQuery!.From.Id : default;
 
-                await bot.SendTextMessageAsync(chatId, responseMessage, cancellationToken: cancellationToken);
+                if (update.Message is not null || update.CallbackQuery is not null)
+                    await bot.SendTextMessageAsync(chatId, responseMessage, cancellationToken: cancellationToken);
+
                 Console.WriteLine($"Error handling 'update': {ex.Message}");
             }
         }
