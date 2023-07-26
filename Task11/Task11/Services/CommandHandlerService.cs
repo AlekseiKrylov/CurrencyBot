@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Task11.Models;
@@ -120,7 +121,7 @@ namespace Task11.Services
 
         private async Task<CommandHandlerResult> HandleInputDate(long chatId, string messageText, UserData userData)
         {
-            if (!DateTime.TryParseExact(messageText, DATE_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+            if (!DateTime.TryParseExact(messageText, DATE_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime selectedDate))
                 return new CommandHandlerResult
                 {
                     ResponseMessage = GetLocalizedMessage(RKeys.InvalidDateMessage, userData.LanguageCode),
@@ -130,13 +131,13 @@ namespace Task11.Services
             var selectedCurrency = userData.SelectedCurrency;
             try
             {
-                var currencyRateInfo = await _currencyService.GetCurrencyInfoAsync(selectedCurrency, messageText, userData.LanguageCode);
+                var currencyRateInfo = await _currencyService.GetCurrencyInfoAsync(selectedCurrency, selectedDate, userData.LanguageCode);
 
                 var exchangeCourseMessage = GetLocalizedMessage(RKeys.ExchangeCourseMessage, userData.LanguageCode);
 
                 var formattedResponseMessage = string.Format
                     (exchangeCourseMessage
-                    , messageText
+                    , selectedDate.ToString(DATE_FORMAT)
                     , selectedCurrency
                     , FormatRate(currencyRateInfo.PurchaseRate, DECIMAL_POINT, userData.LanguageCode)
                     , FormatRate(currencyRateInfo.SaleRate, DECIMAL_POINT, userData.LanguageCode)

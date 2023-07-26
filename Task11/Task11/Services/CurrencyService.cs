@@ -16,11 +16,11 @@ namespace Task11.Services
             _bankApiUrl = httpClient.BaseAddress.ToString();
         }
 
-        public async Task<CurrencyRate> GetCurrencyRatesAsync(string date, string userLanguage)
+        public async Task<CurrencyRate> GetCurrencyRatesAsync(DateTime date, string userLanguage)
         {
             try
             {
-                string url = $"{_bankApiUrl}?json&date={date}";
+                string url = $"{_bankApiUrl}?json&date={date:dd.MM.yyyy}";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
@@ -44,11 +44,11 @@ namespace Task11.Services
             }
         }
 
-        public async Task<CurrencyInfo> GetCurrencyInfoAsync(string currencyCode, string date, string userLanguage)
+        public async Task<CurrencyInfo> GetCurrencyInfoAsync(string currencyCode, DateTime date, string userLanguage)
         {
             try
             {
-                string url = $"{_bankApiUrl}?json&date={date}";
+                string url = $"{_bankApiUrl}?json&date={date:dd.MM.yyyy}";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();

@@ -15,6 +15,7 @@ namespace Task11.Tests
         private Mock<ICurrencyService> _currencyServiceMock;
         private Mock<IUserDataService> _userDataServiceMock;
         private const long CHAT_ID = 12345;
+        private const string DATE_FORMAT = "dd.MM.yyyy";
 
         [ClassInitialize]
         public static void InitializeClass(TestContext testContext)
@@ -136,7 +137,7 @@ namespace Task11.Tests
             // Arrange
             var userData = new UserData { LanguageCode = languageCode, SelectedCurrency = "USD" };
             var expectedButtons = expectedKeyboardButtons.Split(',');
-            var messageText = "15.05.2021";
+            var messageText = new DateTime(2021, 05, 15);
             var currencyRateInfo = new CurrencyInfo
             {
                 PurchaseRate = 26.5m,
@@ -146,14 +147,14 @@ namespace Task11.Tests
             _currencyServiceMock.Setup(x => x.GetCurrencyInfoAsync("USD", messageText, languageCode)).ReturnsAsync(currencyRateInfo);
             var expectedFormattedResponseMessage = string.Format
                 (expectedResponse
-                , messageText
+                , messageText.ToString(DATE_FORMAT)
                 , userData.SelectedCurrency
                 , currencyRateInfo.PurchaseRate
                 , currencyRateInfo.SaleRate
                 , currencyRateInfo.BaseCurrency);
 
             // Act
-            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, messageText, userData);
+            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, messageText.ToString(DATE_FORMAT), userData);
 
             // Assert
             Assert.AreEqual(expectedFormattedResponseMessage, result.ResponseMessage);
@@ -175,7 +176,7 @@ namespace Task11.Tests
             // Arrange
             var userData = new UserData { LanguageCode = languageCode, SelectedCurrency = "USD" };
             var expectedButtons = expectedKeyboardButtons.Split(',');
-            var messageText = "15.05.21";
+            var messageText = "15.05.20211";
 
             // Act
             var result = await _commandHandlerService.HandleCommand("", CHAT_ID, messageText, userData);
@@ -199,18 +200,18 @@ namespace Task11.Tests
         {
             // Arrange
             var userData = new UserData { LanguageCode = languageCode, SelectedCurrency = "USD" };
-            var messageText = "15.05.2021";
+            var messageText = new DateTime(2021, 05, 15);
 
             _currencyServiceMock.Setup(x => x.GetCurrencyInfoAsync(userData.SelectedCurrency, messageText, userData.LanguageCode))
                        .ThrowsAsync(new NullReferenceException(expectedResponse));
 
             var expectedFormattedResponseMessage = string.Format
                 (expectedResponse
-                , messageText
+                , messageText.ToString(DATE_FORMAT)
                 , userData.SelectedCurrency);
 
             // Act
-            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, messageText, userData);
+            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, messageText.ToString(DATE_FORMAT), userData);
 
             // Assert
             Assert.AreEqual(expectedFormattedResponseMessage, result.ResponseMessage);
@@ -224,18 +225,18 @@ namespace Task11.Tests
         {
             // Arrange
             var userData = new UserData { LanguageCode = languageCode, SelectedCurrency = "USD" };
-            var messageText = "15.05.2021";
+            var messageText = new DateTime(2021, 05, 15);
 
             _currencyServiceMock.Setup(x => x.GetCurrencyInfoAsync(userData.SelectedCurrency, messageText, userData.LanguageCode))
                        .ThrowsAsync(new NullReferenceException(expectedResponse));
 
             var expectedFormattedResponseMessage = string.Format
                 (expectedResponse
-                , messageText
+                , messageText.ToString(DATE_FORMAT)
                 , userData.SelectedCurrency);
 
             // Act
-            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, messageText, userData);
+            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, messageText.ToString(DATE_FORMAT), userData);
 
             // Assert
             Assert.AreEqual(expectedFormattedResponseMessage, result.ResponseMessage);
@@ -249,13 +250,13 @@ namespace Task11.Tests
         {
             // Arrange
             var userData = new UserData { LanguageCode = languageCode, SelectedCurrency = "USD" };
-            var messageText = "15.05.2021";
+            var messageText = new DateTime(2021, 05, 15);
 
             _currencyServiceMock.Setup(x => x.GetCurrencyInfoAsync(userData.SelectedCurrency, messageText, userData.LanguageCode))
                        .ThrowsAsync(new HttpRequestException(expectedResponse));
 
             // Act
-            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, messageText, userData);
+            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, messageText.ToString(DATE_FORMAT), userData);
 
             // Assert
             Assert.AreEqual(expectedResponse, result.ResponseMessage);
@@ -269,13 +270,13 @@ namespace Task11.Tests
         {
             // Arrange
             var userData = new UserData { LanguageCode = languageCode, SelectedCurrency = "USD" };
-            var messageText = "15.05.2021";
+            var messageText = new DateTime(2021, 05, 15);
 
             _currencyServiceMock.Setup(x => x.GetCurrencyInfoAsync(userData.SelectedCurrency, messageText, userData.LanguageCode))
                        .ThrowsAsync(new JsonException(expectedResponse));
 
             // Act
-            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, messageText, userData);
+            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, messageText.ToString(DATE_FORMAT), userData);
 
             // Assert
             Assert.AreEqual(expectedResponse, result.ResponseMessage);

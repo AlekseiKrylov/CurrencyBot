@@ -4,7 +4,7 @@ namespace Task11.Services.Interfaces
 {
     public interface ICurrencyService
     {
-        Task<CurrencyRate> GetCurrencyRatesAsync(string date, string userLanguage);
-        Task<CurrencyInfo> GetCurrencyInfoAsync(string currencyCode, string date, string userLanguage);
+        Task<CurrencyRate> GetCurrencyRatesAsync(DateTime date, string userLanguage);
+        Task<CurrencyInfo> GetCurrencyInfoAsync(string currencyCode, DateTime date, string userLanguage);
     }
 }
