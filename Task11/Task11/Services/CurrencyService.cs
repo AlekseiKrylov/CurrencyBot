@@ -8,11 +8,13 @@ namespace Task11.Services
     public class CurrencyService : ICurrencyService
     {
         private readonly HttpClient _httpClient;
+        private readonly HashSet<string> _availableCurrencies;
         private readonly string _bankApiUrl;
 
-        public CurrencyService(HttpClient httpClient)
+        public CurrencyService(HttpClient httpClient, HashSet<string> availableCurrencies)
         {
             _httpClient = httpClient;
+            _availableCurrencies = availableCurrencies;
             _bankApiUrl = httpClient.BaseAddress.ToString();
         }
 
@@ -46,6 +48,9 @@ namespace Task11.Services
 
         public async Task<CurrencyInfo> GetCurrencyInfoAsync(string currencyCode, DateTime date, string userLanguage)
         {
+            if (!_availableCurrencies.Contains(currencyCode.ToUpper()))
+                throw new ArgumentException($"Currency {0} is not available.", currencyCode);
+
             try
             {
                 string url = $"{_bankApiUrl}?json&date={date:dd.MM.yyyy}";

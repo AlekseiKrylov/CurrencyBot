@@ -1,7 +1,5 @@
-﻿using Microsoft.VisualBasic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using Task11.Models;
 using Task11.Services.Interfaces;
 using static Task11.Resources.ResourceKeys;
@@ -11,16 +9,17 @@ namespace Task11.Services
 {
     public class CommandHandlerService : ICommandHandlerService
     {
-        private const string PATTERN_CURRENCY_CODE = @"^[A-Za-z]{3}$";
         private const string DATE_FORMAT = "dd.MM.yyyy";
         private const int DECIMAL_POINT = 2;
         private readonly ICurrencyService _currencyService;
         private readonly IUserDataService _userDataService;
+        private readonly HashSet<string> _availableCurrencies;
 
-        public CommandHandlerService(ICurrencyService currencyService, IUserDataService userDataService)
+        public CommandHandlerService(ICurrencyService currencyService, IUserDataService userDataService, HashSet<string> availableCurrencies)
         {
             _currencyService = currencyService;
             _userDataService = userDataService;
+            _availableCurrencies = availableCurrencies;
         }
 
         public async Task<CommandHandlerResult> HandleCommand(string command, long chatId, string messageText, UserData userData)
@@ -50,7 +49,7 @@ namespace Task11.Services
 
         private CommandHandlerResult HandleGoCommand(UserData userData) => new()
         {
-            ResponseMessage = GetLocalizedMessage(RKeys.CurrencyPromptMessage, userData.LanguageCode),
+            ResponseMessage = string.Format(GetLocalizedMessage(RKeys.CurrencyPromptMessage, userData.LanguageCode), string.Join(", ", _availableCurrencies)),
             Keyboard = CurrencyMenu()
         };
 
@@ -102,10 +101,13 @@ namespace Task11.Services
 
         private CommandHandlerResult HandleInputCurrency(long chatId, string messageText, UserData userData)
         {
-            if (!Regex.IsMatch(messageText, PATTERN_CURRENCY_CODE))
+            if (!_availableCurrencies.Contains(messageText.ToUpper()))
                 return new CommandHandlerResult
                 {
-                    ResponseMessage = GetLocalizedMessage(RKeys.InvalidCurrencyMessage, userData.LanguageCode),
+                    ResponseMessage = string.Format(
+                        GetLocalizedMessage(RKeys.InvalidCurrencyMessage, userData.LanguageCode)
+                        , messageText
+                        , string.Join(", ", _availableCurrencies)),
                     Keyboard = CurrencyMenu()
                 };
 
@@ -135,8 +137,8 @@ namespace Task11.Services
 
                 var exchangeCourseMessage = GetLocalizedMessage(RKeys.ExchangeCourseMessage, userData.LanguageCode);
 
-                var formattedResponseMessage = string.Format
-                    (exchangeCourseMessage
+                var formattedResponseMessage = string.Format(
+                    exchangeCourseMessage
                     , selectedDate.ToString(DATE_FORMAT)
                     , selectedCurrency
                     , FormatRate(currencyRateInfo.PurchaseRate, DECIMAL_POINT, userData.LanguageCode)

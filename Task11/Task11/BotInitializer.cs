@@ -13,11 +13,15 @@ namespace Task11
     {
         private readonly string _botToken;
         private readonly string _apiUrl;
+        private readonly HashSet<string> _availableCurrencies;
 
         public BotInitializer(IConfiguration configuration)
         {
             _botToken = configuration["BotSettings:Token"];
             _apiUrl = configuration["ApiSettings:PrivatBankApiUrl"];
+            _availableCurrencies = new HashSet<string>(
+                configuration.GetSection("CurrencySettings:AvailableCurrencies").Get<List<string>>(),
+                StringComparer.OrdinalIgnoreCase);
         }
 
         public void Initialize()
@@ -49,7 +53,11 @@ namespace Task11
         private IServiceProvider ConfigureServices() => new ServiceCollection()
             .AddSingleton<ITelegramBotClient>(new TelegramBotClient(_botToken))
             .AddSingleton<IUserDataService, UserDataService>()
-            .AddSingleton<ICommandHandlerService, CommandHandlerService>()
+            .AddSingleton<ICommandHandlerService, CommandHandlerService>(provider =>
+            new CommandHandlerService(
+                provider.GetRequiredService<ICurrencyService>(),
+                provider.GetRequiredService<IUserDataService>(),
+                _availableCurrencies))
             .AddSingleton<HandlerService>()
             .AddHttpClient()
             .AddSingleton<ICurrencyService, CurrencyService>(provider =>
@@ -58,7 +66,7 @@ namespace Task11
                 var httpClient = httpClientFactory.CreateClient();
                 httpClient.BaseAddress = new Uri(_apiUrl);
 
-                return new CurrencyService(httpClient);
+                return new CurrencyService(httpClient, _availableCurrencies);
             })
             .AddSingleton(provider =>
             {

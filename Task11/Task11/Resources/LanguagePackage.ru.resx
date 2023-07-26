@@ -118,7 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CurrencyPromptMessage" xml:space="preserve">
-    <value>Выберите валюту на экранной клавиатуре или отправьте в чат код валюты. Пример USD.</value>
+    <value>Выберите валюту на экранной клавиатуре или отправьте в чат код валюты.
+Список доступных валют: {0}</value>
     <comment>Message</comment>
   </data>
   <data name="DatePromptMessage" xml:space="preserve">
@@ -156,7 +157,8 @@
     <comment>Message</comment>
   </data>
   <data name="InvalidCurrencyMessage" xml:space="preserve">
-    <value>Некорректный формат валюты. Попробуйте ещё раз.</value>
+    <value>Валюта {0} недоступна. Попробуйте ещё раз.
+Список доступных валют: {1}</value>
     <comment>Message</comment>
   </data>
   <data name="InvalidDateMessage" xml:space="preserve">

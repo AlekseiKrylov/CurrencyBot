@@ -118,7 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CurrencyPromptMessage" xml:space="preserve">
-    <value>Select the currency on the on-screen keyboard or send the currency code to the chat. Example USD.</value>
+    <value>Select the currency on the on-screen keyboard or send the currency code to the chat.
+List of available currencies: {0}</value>
     <comment>Message</comment>
   </data>
   <data name="DatePromptMessage" xml:space="preserve">
@@ -156,7 +157,8 @@ Sell rate: {3} {4}</value>
     <comment>Message</comment>
   </data>
   <data name="InvalidCurrencyMessage" xml:space="preserve">
-    <value>Invalid currency format. Please try again.</value>
+    <value>Currency {0} is not available. Please try again.
+List of available currencies: {1}</value>
     <comment>Message</comment>
   </data>
   <data name="InvalidDateMessage" xml:space="preserve">

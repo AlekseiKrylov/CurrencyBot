@@ -16,6 +16,7 @@ namespace Task11.Tests
         private Mock<IUserDataService> _userDataServiceMock;
         private const long CHAT_ID = 12345;
         private const string DATE_FORMAT = "dd.MM.yyyy";
+        private readonly HashSet<string> _availableTestCurrencies = new() { "USD", "EUR" };
 
         [ClassInitialize]
         public static void InitializeClass(TestContext testContext)
@@ -29,7 +30,7 @@ namespace Task11.Tests
         {
             _currencyServiceMock = new Mock<ICurrencyService>();
             _userDataServiceMock = new Mock<IUserDataService>();
-            _commandHandlerService = new CommandHandlerService(_currencyServiceMock.Object, _userDataServiceMock.Object);
+            _commandHandlerService = new CommandHandlerService(_currencyServiceMock.Object, _userDataServiceMock.Object, _availableTestCurrencies);
         }
 
         [TestMethod]
@@ -57,20 +58,21 @@ namespace Task11.Tests
         }
 
         [TestMethod]
-        [DataRow("en", "Select the currency on the on-screen keyboard or send the currency code to the chat. Example USD.", "USD,EUR")]
-        [DataRow("ru", "Выберите валюту на экранной клавиатуре или отправьте в чат код валюты. Пример USD.", "USD,EUR")]
-        [DataRow("uk", "Виберіть валюту на екранній клавіатурі або надішліть у чат код валюти. Приклад USD.", "USD,EUR")]
+        [DataRow("en", "Select the currency on the on-screen keyboard or send the currency code to the chat.\r\nList of available currencies: {0}", "USD,EUR")]
+        [DataRow("ru", "Выберите валюту на экранной клавиатуре или отправьте в чат код валюты.\r\nСписок доступных валют: {0}", "USD,EUR")]
+        [DataRow("uk", "Виберіть валюту на екранній клавіатурі або надішліть у чат код валюти.\r\nСписок доступних валют: {0}", "USD,EUR")]
         public async Task HandleGoCommand(string languageCode, string expectedResponse, string expectedKeyboardButtons)
         {
             // Arrange
             var userData = new UserData { LanguageCode = languageCode };
             var expectedButtons = expectedKeyboardButtons.Split(',');
+            var expectedFormattedResponse = string.Format(expectedResponse, string.Join(", ", _availableTestCurrencies));
 
             // Act
             var result = await _commandHandlerService.HandleCommand("/go", CHAT_ID, "", userData);
 
             // Assert
-            Assert.AreEqual(expectedResponse, result.ResponseMessage);
+            Assert.AreEqual(expectedFormattedResponse, result.ResponseMessage);
 
             var keyboardButtons = result.Keyboard?.InlineKeyboard
             .SelectMany(row => row.Select(button => button.Text))
@@ -105,20 +107,25 @@ namespace Task11.Tests
         }
 
         [TestMethod]
-        [DataRow("en", "Invalid currency format. Please try again.", "USD,EUR")]
-        [DataRow("ru", "Некорректный формат валюты. Попробуйте ещё раз.", "USD,EUR")]
-        [DataRow("uk", "Некоректний формат валюти. Спробуйте ще раз.", "USD,EUR")]
+        [DataRow("en", "Currency {0} is not available. Please try again.\r\nList of available currencies: {1}", "USD,EUR")]
+        [DataRow("ru", "Валюта {0} недоступна. Попробуйте ещё раз.\r\nСписок доступных валют: {1}", "USD,EUR")]
+        [DataRow("uk", "Валюта {0} недоступна. Спробуйте ще раз.\r\nСписок доступних валют: {1}", "USD,EUR")]
         public async Task HandleInputCurrency_InvalidCurrency(string languageCode, string expectedResponse, string expectedKeyboardButtons)
         {
             // Arrange
             var userData = new UserData { LanguageCode = languageCode };
             var expectedButtons = expectedKeyboardButtons.Split(',');
+            var inputCurrency = "USDT";
+            var expectedFormattedResponse = string.Format(
+                expectedResponse
+                , inputCurrency
+                , string.Join(", ", _availableTestCurrencies));
 
             // Act
-            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, "USDT", userData);
+            var result = await _commandHandlerService.HandleCommand("", CHAT_ID, inputCurrency, userData);
 
             // Assert
-            Assert.AreEqual(expectedResponse, result.ResponseMessage);
+            Assert.AreEqual(expectedFormattedResponse, result.ResponseMessage);
 
             var keyboardButtons = result.Keyboard?.InlineKeyboard
             .SelectMany(row => row.Select(button => button.Text))
