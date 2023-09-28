@@ -70,7 +70,7 @@ namespace CurrencyBot
             })
             .AddSingleton(provider =>
             {
-                return new ResourceManager("Task11.Resources.LanguagePackage", typeof(Program).Assembly);
+                return new ResourceManager("CurrencyBot.Resources.LanguagePackage", typeof(Program).Assembly);
             })
             .BuildServiceProvider();
     }

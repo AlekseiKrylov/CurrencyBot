@@ -1,3 +1,4 @@
+using CurrencyBot.Models;
 using CurrencyBot.Resources;
 using CurrencyBot.Services;
 using CurrencyBot.Services.Interfaces;
@@ -20,7 +21,7 @@ namespace CurrencyBot.Tests
         [ClassInitialize]
         public static void InitializeClass(TestContext testContext)
         {
-            var resourceManager = new ResourceManager("Task11.Resources.LanguagePackage", typeof(CommandHandlerService).Assembly);
+            var resourceManager = new ResourceManager("CurrencyBot.Resources.LanguagePackage", typeof(CommandHandlerService).Assembly);
             ResourceKeys.InitializeResourceManager(resourceManager);
         }
 

@@ -1,4 +1,5 @@
-﻿using CurrencyBot.Services.Interfaces;
+﻿using CurrencyBot.Models;
+using CurrencyBot.Services.Interfaces;
 using System.Text.RegularExpressions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
