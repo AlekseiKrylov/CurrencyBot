@@ -1,7 +1,7 @@
 ﻿using Telegram.Bot.Types.ReplyMarkups;
-using static Task11.Resources.ResourceKeys;
+using static CurrencyBot.Resources.ResourceKeys;
 
-namespace Task11.Utilities
+namespace CurrencyBot.Utilities
 {
     public static class MenuBuilder
     {

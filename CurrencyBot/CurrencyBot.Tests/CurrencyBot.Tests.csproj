@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Task11\Task11.csproj" />
+    <ProjectReference Include="..\CurrencyBot\CurrencyBot.csproj" />
   </ItemGroup>
 
 </Project>

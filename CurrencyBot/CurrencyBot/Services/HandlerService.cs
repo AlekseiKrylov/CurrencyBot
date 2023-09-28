@@ -1,12 +1,11 @@
-﻿using System.Text.RegularExpressions;
-using Task11.Models;
-using Task11.Services.Interfaces;
+﻿using CurrencyBot.Services.Interfaces;
+using System.Text.RegularExpressions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using static Task11.Resources.ResourceKeys;
+using static CurrencyBot.Resources.ResourceKeys;
 
-namespace Task11.Services
+namespace CurrencyBot.Services
 {
     public class HandlerService
     {
@@ -27,16 +26,16 @@ namespace Task11.Services
                 if (update.Type != UpdateType.CallbackQuery && update.CallbackQuery is null && update.Type != UpdateType.Message && update.Message?.From is null)
                     return;
 
-                long chatId = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery!.From.Id
-                            : (update.Type == UpdateType.Message) ? update.Message!.Chat.Id
+                long chatId = update.Type == UpdateType.CallbackQuery ? update.CallbackQuery!.From.Id
+                            : update.Type == UpdateType.Message ? update.Message!.Chat.Id
                             : default;
 
-                var messageText = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery!.Data ?? string.Empty
-                                   : (update.Type == UpdateType.Message) ? update.Message!.Text ?? string.Empty
+                var messageText = update.Type == UpdateType.CallbackQuery ? update.CallbackQuery!.Data ?? string.Empty
+                                   : update.Type == UpdateType.Message ? update.Message!.Text ?? string.Empty
                                    : string.Empty;
 
-                var languageCode = (update.Type == UpdateType.CallbackQuery) ? update.CallbackQuery!.From.LanguageCode ?? string.Empty
-                                    : (update.Type == UpdateType.Message) ? update.Message!.From!.LanguageCode ?? string.Empty
+                var languageCode = update.Type == UpdateType.CallbackQuery ? update.CallbackQuery!.From.LanguageCode ?? string.Empty
+                                    : update.Type == UpdateType.Message ? update.Message!.From!.LanguageCode ?? string.Empty
                                     : string.Empty;
 
                 var command = Regex.IsMatch(messageText, PATTERN_COMMAND) ? messageText : string.Empty;
@@ -62,7 +61,7 @@ namespace Task11.Services
                     _ => GetLocalizedMessage(RKeys.RequestProcessingError, string.Empty)
                 };
 
-                var chatId = (update.Message is not null) ? update.Message!.Chat.Id : (update.CallbackQuery is not null) ? update.CallbackQuery!.From.Id : default;
+                var chatId = update.Message is not null ? update.Message!.Chat.Id : update.CallbackQuery is not null ? update.CallbackQuery!.From.Id : default;
 
                 if (update.Message is not null || update.CallbackQuery is not null)
                     await bot.SendTextMessageAsync(chatId, responseMessage, cancellationToken: cancellationToken);

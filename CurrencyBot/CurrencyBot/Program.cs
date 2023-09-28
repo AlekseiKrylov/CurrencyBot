@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Task11
+namespace CurrencyBot
 {
     internal class Program
     {

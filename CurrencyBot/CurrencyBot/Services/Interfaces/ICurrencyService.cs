@@ -1,6 +1,6 @@
-﻿using Task11.Models;
+﻿using CurrencyBot.Models;
 
-namespace Task11.Services.Interfaces
+namespace CurrencyBot.Services.Interfaces
 {
     public interface ICurrencyService
     {

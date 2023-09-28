@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Task11.Models
+namespace CurrencyBot.Models
 {
     public class CommandHandlerResult
     {

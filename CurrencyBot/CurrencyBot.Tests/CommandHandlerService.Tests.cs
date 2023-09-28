@@ -1,12 +1,11 @@
+using CurrencyBot.Resources;
+using CurrencyBot.Services;
+using CurrencyBot.Services.Interfaces;
 using Moq;
 using Newtonsoft.Json;
 using System.Resources;
-using Task11.Models;
-using Task11.Resources;
-using Task11.Services;
-using Task11.Services.Interfaces;
 
-namespace Task11.Tests
+namespace CurrencyBot.Tests
 {
     [TestClass]
     public class CommandHandlerServiceTests

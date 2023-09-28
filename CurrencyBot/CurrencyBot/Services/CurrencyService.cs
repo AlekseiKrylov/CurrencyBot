@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using Task11.Models;
-using Task11.Services.Interfaces;
-using static Task11.Resources.ResourceKeys;
+﻿using CurrencyBot.Models;
+using CurrencyBot.Services.Interfaces;
+using Newtonsoft.Json;
+using static CurrencyBot.Resources.ResourceKeys;
 
-namespace Task11.Services
+namespace CurrencyBot.Services
 {
     public class CurrencyService : ICurrencyService
     {

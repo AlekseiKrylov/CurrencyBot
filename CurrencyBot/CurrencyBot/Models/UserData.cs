@@ -1,4 +1,4 @@
-﻿namespace Task11.Models
+﻿namespace CurrencyBot.Models
 {
     public class UserData
     {
@@ -7,8 +7,8 @@
 
         public UserData Copy() => new()
         {
-            SelectedCurrency = this.SelectedCurrency,
-            LanguageCode = this.LanguageCode
+            SelectedCurrency = SelectedCurrency,
+            LanguageCode = LanguageCode
         };
     }
 }

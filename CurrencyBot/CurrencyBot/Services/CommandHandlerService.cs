@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using CurrencyBot.Models;
+using CurrencyBot.Services.Interfaces;
+using Newtonsoft.Json;
 using System.Globalization;
-using Task11.Models;
-using Task11.Services.Interfaces;
-using static Task11.Resources.ResourceKeys;
-using static Task11.Utilities.MenuBuilder;
+using static CurrencyBot.Resources.ResourceKeys;
+using static CurrencyBot.Utilities.MenuBuilder;
 
-namespace Task11.Services
+namespace CurrencyBot.Services
 {
     public class CommandHandlerService : ICommandHandlerService
     {

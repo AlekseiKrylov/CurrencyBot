@@ -1,8 +1,8 @@
-﻿using System.Collections.Concurrent;
-using Task11.Models;
-using Task11.Services.Interfaces;
+﻿using CurrencyBot.Models;
+using CurrencyBot.Services.Interfaces;
+using System.Collections.Concurrent;
 
-namespace Task11.Services
+namespace CurrencyBot.Services
 {
     public class UserDataService : IUserDataService
     {

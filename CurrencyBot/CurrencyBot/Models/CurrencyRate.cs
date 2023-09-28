@@ -1,4 +1,4 @@
-﻿namespace Task11.Models
+﻿namespace CurrencyBot.Models
 {
     public class CurrencyRate
     {

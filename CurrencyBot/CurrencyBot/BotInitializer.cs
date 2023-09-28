@@ -1,13 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using CurrencyBot.Resources;
+using CurrencyBot.Services;
+using CurrencyBot.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Resources;
-using Task11.Resources;
-using Task11.Services;
-using Task11.Services.Interfaces;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 
-namespace Task11
+namespace CurrencyBot
 {
     internal class BotInitializer
     {

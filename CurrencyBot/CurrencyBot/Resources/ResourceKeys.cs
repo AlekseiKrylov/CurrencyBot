@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Resources;
 
-namespace Task11.Resources
+namespace CurrencyBot.Resources
 {
     public static class ResourceKeys
     {
