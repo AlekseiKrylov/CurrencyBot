@@ -12,6 +12,6 @@ User can choose a language. The default language is set from the user's Telegram
 ### Screenshots
 
 <p align="center">
-<img  src="./Screenshots/Image 001.png" width="35%">
-<img  src="./Screenshots/Image 002.png" width="35%">
+<img  src="./Screenshots/Image 001.png" width="40%">
+<img  src="./Screenshots/Image 002.png" width="40%">
 </p>
